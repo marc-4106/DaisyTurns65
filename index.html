@@ -73,7 +73,7 @@ body {
 </head>
 <body>
 
-<audio id="birthday-audio" src="happy-birthday-music.mp3" loop preload="auto"></audio>
+<audio id="birthday-audio" src="happy-birthday-music.mp3" loop preload="auto" muted></audio>
 
 <div class="invitation-card max-w-4xl w-full p-6 md:p-12 relative overflow-hidden">
 
@@ -108,7 +108,7 @@ body {
                     <div>
                         <p class="text-xs uppercase text-gray-500 font-medium">Date & Time</p>
                         <p class="text-lg font-semibold text-yellow-900">Wednesday, December 17th, 2025</p>
-                        <p class="text-gray-700">6:00 PM onwards</p>
+                        <p class="text-gray-700">5:00 PM onwards</p>
                     </div>
                 </div>
 
@@ -173,7 +173,15 @@ body {
 <div id="map-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
     <div class="bg-white rounded-xl w-11/12 max-w-lg p-4 relative">
         <button id="close-map" class="absolute top-2 right-2 text-gray-700 font-bold text-lg">×</button>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.0886884617456!2d122.9529249764516!3d10.668581064505517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a4edb186b86d99%3A0x88481232822a946a!2sL%E2%80%99Sea%20Dimsum%20House!5e0!3m2!1sen!2sph!4v1700147690664!5m2!1sen!2sph" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe 
+            src="https://maps.google.com/maps?q=14th+Lacson+St,+Bacolod,+6100+Negros+Occidental&output=embed" 
+            width="100%" 
+            height="300" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
     </div>
 </div>
 
@@ -182,31 +190,31 @@ body {
 <script>
 (function() {
     // Event Constants
-    const EVENT_DATE = "Dec 17, 2025 18:00:00";
+    // CORRECTED: Set to 5:00 PM (17:00:00) to match the HTML text
+    const EVENT_DATE = "Dec 17, 2025 17:00:00"; 
     const EVENT_TITLE = "Daisy’s 65th Birthday Celebration";
     const EVENT_LOCATION = "L’Sea Dimsum House, Lacson St., Bacolod City";
-    const EVENT_DURATION_HOURS = 3; // Assuming the party lasts 3 hours (6:00 PM to 9:00 PM)
+    const EVENT_DURATION_HOURS = 3; // Party runs from 5PM to 8PM (17:00 to 20:00)
 
     // --- MUSIC PLAYER ---
     const audio = document.getElementById('birthday-audio');
-    const musicBtn = document.getElementById('music-toggle-btn');
-    let isPlaying = false;
+    const musicBtn = document.getElementById('music-toggle-btn'); 
     let musicStarted = false; 
+    let isPlaying = false; 
 
-    // Toggles the audio playback and updates the button text
+    // Toggles the audio playback
     const toggleMusic = () => {
         if (isPlaying) {
             audio.pause();
-            musicBtn.innerHTML = '▶️ Play Music';
         } else {
+            audio.muted = false; 
             audio.play().catch(error => {
                 console.error("Audio playback failed:", error);
             });
-            musicBtn.innerHTML = '⏸️ Pause Music';
         }
         isPlaying = !isPlaying;
     };
-    
+
     // Function to start music on the very first user interaction (click/tap)
     const startMusicOnFirstInteraction = () => {
         if (!musicStarted && audio) {
@@ -222,19 +230,6 @@ body {
     document.addEventListener('click', startMusicOnFirstInteraction);
     document.addEventListener('touchstart', startMusicOnFirstInteraction);
 
-    // Attach handler to the dedicated button for pausing/resuming
-    if (musicBtn) {
-        musicBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevents this click from also triggering the document listener
-            if (musicStarted) {
-                toggleMusic();
-            } else {
-                // If music hasn't started yet (unlikely), force start
-                startMusicOnFirstInteraction();
-            }
-        });
-    }
-
     // --- UTILITIES ---
 
     // Function to format a date for Google Calendar URL (YYYYMMDDTHHMMSSZ)
@@ -244,19 +239,25 @@ body {
 
     // Function to generate the Google Calendar URL
     const generateGoogleCalendarUrl = () => {
-        const startDate = new Date(EVENT_DATE);
+        const actualStartDate = new Date(EVENT_DATE);
         
-        // Calculate end date by adding assumed duration
-        const endDate = new Date(startDate.getTime() + EVENT_DURATION_HOURS * 60 * 60 * 1000);
+        // NEW: Create a reminder date object for 9:00 AM
+        const reminderStartDate = new Date(actualStartDate);
+        reminderStartDate.setHours(9, 0, 0, 0);
 
-        const startFormatted = formatCalendarDate(startDate);
+        // Calculate the event's end time (5:00 PM + 3 hours = 8:00 PM)
+        const endDate = new Date(actualStartDate.getTime() + EVENT_DURATION_HOURS * 60 * 60 * 1000);
+
+        // Calendar entry will span from 9:00 AM to 8:00 PM
+        const startFormatted = formatCalendarDate(reminderStartDate);
         const endFormatted = formatCalendarDate(endDate);
         
         const baseUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE";
         const text = `&text=${encodeURIComponent(EVENT_TITLE)}`;
         const dates = `&dates=${startFormatted}/${endFormatted}`;
         const location = `&location=${encodeURIComponent(EVENT_LOCATION)}`;
-        const details = `&details=${encodeURIComponent("A celebration of love, laughter & wonderful years for Daisy!")}`;
+        // Clarify the actual party time in the description
+        const details = `&details=${encodeURIComponent("This is a reminder for Daisy's birthday! The party itself starts at 5:00 PM. Use this entry to prepare or block out the day.")}`;
         
         return baseUrl + text + dates + location + details;
     };
@@ -319,7 +320,7 @@ body {
             flower.src = 'daisy.png'; 
             flower.className = 'flower';
             flower.style.position = 'absolute';
-            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.left = Math.random() * 95 + 'vw'; 
             flower.style.top = Math.random() * 80 + 'vh';
             flower.style.width = (30 + Math.random()*50) + 'px'; 
             flower.style.height = 'auto';
@@ -336,10 +337,11 @@ body {
         staticFlowerBtn.addEventListener('click', handleFlowerClick);
     }
 
-    // Map Modal
+    // Map Modal 
     const mapBtn = document.getElementById('view-map-btn');
     const mapModal = document.getElementById('map-modal');
     const closeMap = document.getElementById('close-map');
+    
     mapBtn.addEventListener('click', ()=>{ mapModal.classList.remove('hidden'); });
     closeMap.addEventListener('click', ()=>{ mapModal.classList.add('hidden'); });
     mapModal.addEventListener('click',(e)=>{ if(e.target===mapModal) mapModal.classList.add('hidden'); });
