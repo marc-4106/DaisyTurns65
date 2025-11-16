@@ -198,36 +198,18 @@ body {
     // --- MUSIC PLAYER ---
     const audio = document.getElementById('birthday-audio');
     let musicStarted = false; 
-    let isPlaying = false; 
 
-    // Toggles the audio playback
-    const toggleMusic = () => {
-        if (isPlaying) {
-            audio.pause();
-        } else {
-            // FIX for Android/Mobile: Unmute and play on user tap
+    // Function to start music on the flower button click
+    const startMusic = () => {
+        if (!musicStarted && audio) {
+            // Must unmute before playing on mobile devices
             audio.muted = false; 
             audio.play().catch(error => {
-                console.error("Audio playback failed:", error);
+                console.error("Audio playback failed on interaction:", error);
             });
-        }
-        isPlaying = !isPlaying;
-    };
-
-    // Function to start music on the very first user interaction (click/tap)
-    const startMusicOnFirstInteraction = () => {
-        if (!musicStarted && audio) {
-            toggleMusic(); 
             musicStarted = true;
-            // Remove the listener so it only runs once
-            document.removeEventListener('click', startMusicOnFirstInteraction);
-            document.removeEventListener('touchstart', startMusicOnFirstInteraction);
         }
     };
-
-    // Attach handler to the whole document for the very first click/tap
-    document.addEventListener('click', startMusicOnFirstInteraction);
-    document.addEventListener('touchstart', startMusicOnFirstInteraction);
 
     // --- UTILITIES ---
 
@@ -311,8 +293,12 @@ body {
         staticCalendarBtn.addEventListener('click', handleCalendarClick);
     }
 
-    // Flower Animation Handler
+    // Flower Animation Handler (NOW INCLUDES MUSIC START)
     const handleFlowerClick = () => {
+        // 1. Attempt to start music on the strongest user gesture (the button click)
+        startMusic();
+        
+        // 2. Run the flower animation logic
         const count = 20;
         for(let i=0;i<count;i++){
             const flower = document.createElement('img');
@@ -330,6 +316,7 @@ body {
         }
     };
     
+    // Attach handleFlowerClick to both 'Send Daisy a Flower' buttons
     document.getElementById('send-flower-btn').addEventListener('click', handleFlowerClick);
     const staticFlowerBtn = document.getElementById('send-flower-btn-static');
     if (staticFlowerBtn) {
