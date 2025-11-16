@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daisy’s 65th Birthday Celebration</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Great+Vibes&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(120deg, #faf3e8, #f7ead7);
+    min-height: 100vh;
+    /* FIX: Increased bottom padding to 130px to fully clear the fixed button bar on small screens. */
+    padding: 20px 20px 130px 20px; 
+    overflow-x: hidden;
+}
+
+.invitation-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 215, 150, 0.4);
+    box-shadow: 0 20px 40px rgba(150, 120, 60, 0.15);
+    animation: fadeIn 1s ease-out;
+    transition: 0.3s;
+    /* Center the card on the page */
+    margin: 0 auto; 
+}
+
+.invitation-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 50px rgba(150, 120, 60, 0.2);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.event-title {
+    font-family: 'Great Vibes', cursive;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+}
+
+/* Flower Animation */
+.flower {
+    position: absolute;
+    opacity: 1;
+    animation-name: floatUp;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-400px) rotate(720deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="invitation-card max-w-4xl w-full p-6 md:p-12 relative overflow-hidden">
+
+    <header class="text-center mb-10">
+        <p class="tracking-wider text-yellow-700 text-sm uppercase mb-2">A Day of Grace & Joy</p>
+        <h1 class="event-title text-5xl md:text-6xl text-yellow-900 font-bold">
+           Daisy’s Golden Milestone
+        </h1>
+        <p class="text-gray-700 font-medium mt-2">Gather together to rejoice in 65 wonderful years</p>
+    </header>
+
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+
+        <div class="relative overflow-hidden rounded-xl h-180 bg-gradient-to-br from-yellow-100 to-amber-200 border border-amber-300 shadow-inner">
+            <img src="daisy.jpg" alt="Floral Design" class="w-full h-100vh object-contain opacity-90">
+            <div class="absolute inset-0 bg-gradient-to-t from-yellow-800/40 to-transparent"></div>
+            <p class="absolute bottom-3 left-4 text-amber-50 text-lg italic font-semibold">
+                Forever Fabulous ✨
+            </p>
+        </div>
+
+        <main>
+            <h2 class="text-xl font-bold text-yellow-900 mb-4 pb-2 border-b border-amber-200">Event Details</h2>
+
+            <div class="space-y-6">
+                <div class="flex space-x-4">
+                    <span class="text-3xl">🎀</span>
+                    <div>
+                        <p class="text-xs uppercase text-gray-500 font-medium">Date & Time</p>
+                        <p class="text-lg font-semibold text-yellow-900">Wednesday, December 17th, 2025</p>
+                        <p class="text-gray-700">6:00 PM onwards</p>
+                    </div>
+                </div>
+
+                <div class="flex space-x-4">
+                    <span class="text-3xl">📍</span>
+                    <div>
+                        <p class="text-xs uppercase text-gray-500 font-medium">Venue</p>
+                        <p class="text-lg font-semibold text-yellow-900">L’Sea Dimsum House</p>
+                        <p class="text-gray-700">Lacson St., Bacolod City</p>
+                        <button id="view-map-btn" class="text-amber-700 text-sm font-medium hover:underline">View Map</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-amber-200">
+                <h3 class="text-lg font-bold text-yellow-900 mb-3">Countdown to the Celebration</h3>
+                <div id="countdown" class="grid grid-cols-4 text-center bg-yellow-900 text-white p-4 rounded-xl gap-4">
+                    <div>
+                        <p id="days" class="text-2xl font-bold font-mono">00</p>
+                        <p class="text-xs uppercase mt-1 text-yellow-200">Days</p>
+                    </div>
+                    <div>
+                        <p id="hours" class="text-2xl font-bold font-mono">00</p>
+                        <p class="text-xs uppercase mt-1 text-yellow-200">Hours</p>
+                    </div>
+                    <div>
+                        <p id="minutes" class="text-2xl font-bold font-mono">00</p>
+                        <p class="text-xs uppercase mt-1 text-yellow-200">Mins</p>
+                    </div>
+                    <div>
+                        <p id="seconds" class="text-2xl font-bold font-mono">00</p>
+                        <p class="text-xs uppercase mt-1 text-yellow-200">Secs</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 hidden lg:flex">
+                <button id="send-flower-btn-static" class="cta-button w-full bg-yellow-600 hover:bg-yellow-700 text-white p-3 font-bold rounded-xl shadow-md">
+                    Send Daisy a Flower 💐
+                </button>
+                <button id="calendar-btn-static" class="cta-button w-full border border-yellow-600 text-yellow-900 p-3 font-semibold rounded-xl hover:bg-yellow-100">
+                    + Add to Calendar
+                </button>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<div class="flex flex-col sm:flex-row gap-4
+             fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md z-50
+             lg:hidden">
+    <button id="send-flower-btn" class="cta-button w-full bg-yellow-600 hover:bg-yellow-700 text-white p-3 font-bold rounded-xl shadow-md">
+        Send Daisy a Flower 💐
+    </button>
+    <button id="calendar-btn" class="cta-button w-full border border-yellow-600 text-yellow-900 p-3 font-semibold rounded-xl hover:bg-yellow-100">
+        + Add to Calendar
+    </button>
+</div>
+
+
+<div id="map-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-xl w-11/12 max-w-lg p-4 relative">
+        <button id="close-map" class="absolute top-2 right-2 text-gray-700 font-bold text-lg">×</button>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3921.2384666012727!2d122.95689107567702!3d10.686561563600108!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a49339e56304b7%3A0x8673323089d7fa13!2sL'%20Sea%20Dimsum%20and%20Noodle%20House!5e0!3m2!1sen!2sph!4v1700171638647!5m2!1sen!2sph" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</div>
+
+<div id="message-box" class="fixed bottom-6 right-6 hidden text-white px-4 py-3 rounded-xl shadow-lg transition-all duration-300"></div>
+
+<script>
+(function() {
+    // Event Constants
+    const EVENT_DATE = "Dec 17, 2025 18:00:00";
+    const EVENT_TITLE = "Daisy’s 65th Birthday Celebration";
+    const EVENT_LOCATION = "L’Sea Dimsum House, Lacson St., Bacolod City";
+    const EVENT_DURATION_HOURS = 3; // Assuming the party lasts 3 hours (6:00 PM to 9:00 PM)
+
+    // --- UTILITIES ---
+
+    // Function to format a date for Google Calendar URL (YYYYMMDDTHHMMSSZ)
+    const formatCalendarDate = (date) => {
+        return date.toISOString().replace(/[:-]/g, '').replace(/\.\d{3}/, '');
+    };
+
+    // Function to generate the Google Calendar URL
+    const generateGoogleCalendarUrl = () => {
+        const startDate = new Date(EVENT_DATE);
+        
+        // Calculate end date by adding assumed duration
+        const endDate = new Date(startDate.getTime() + EVENT_DURATION_HOURS * 60 * 60 * 1000);
+
+        const startFormatted = formatCalendarDate(startDate);
+        const endFormatted = formatCalendarDate(endDate);
+        
+        const baseUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+        const text = `&text=${encodeURIComponent(EVENT_TITLE)}`;
+        const dates = `&dates=${startFormatted}/${endFormatted}`;
+        const location = `&location=${encodeURIComponent(EVENT_LOCATION)}`;
+        const details = `&details=${encodeURIComponent("A celebration of love, laughter & wonderful years for Daisy!")}`;
+        
+        return baseUrl + text + dates + location + details;
+    };
+
+    // --- EVENT HANDLERS ---
+
+    // Countdown
+    const countDownDate = new Date(EVENT_DATE).getTime();
+    let x;
+    const countdown = () => {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+        const days = Math.floor(distance / (1000*60*60*24));
+        const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+        const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+        const seconds = Math.floor((distance % (1000*60)) / 1000);
+        document.getElementById("days").innerText = String(days).padStart(2,'0');
+        document.getElementById("hours").innerText = String(hours).padStart(2,'0');
+        document.getElementById("minutes").innerText = String(minutes).padStart(2,'0');
+        document.getElementById("seconds").innerText = String(seconds).padStart(2,'0');
+        if(distance < 0){
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = '<p class="text-xl w-full text-center">The Celebration Has Begun! 🎉</p>';
+        }
+    }
+    countdown();
+    x = setInterval(countdown, 1000);
+
+    // Toast
+    const showMessage = (msg,error=false)=>{
+        const box = document.getElementById('message-box');
+        box.innerText = msg;
+        box.className = "fixed bottom-6 right-6 px-4 py-3 rounded-xl shadow-lg transition-all duration-300 " + (error?"bg-red-500":"bg-green-600");
+        box.classList.remove("hidden");
+        setTimeout(()=>{
+            box.classList.add("opacity-0");
+            setTimeout(()=>box.classList.add("hidden"),300);
+        },3000);
+    }
+
+    // NEW: Calendar Handler
+    const handleCalendarClick = () => {
+        const calUrl = generateGoogleCalendarUrl();
+        window.open(calUrl, '_blank');
+        showMessage("Opening Google Calendar... 📅", false);
+    };
+
+    // Attach handler to BOTH calendar buttons
+    document.getElementById('calendar-btn').addEventListener('click', handleCalendarClick);
+    const staticCalendarBtn = document.getElementById('calendar-btn-static');
+    if (staticCalendarBtn) {
+        staticCalendarBtn.addEventListener('click', handleCalendarClick);
+    }
+
+    // Flower Animation Handler
+    const handleFlowerClick = () => {
+        const count = 20;
+        for(let i=0;i<count;i++){
+            const flower = document.createElement('img');
+            flower.src = 'daisy.png'; 
+            flower.className = 'flower';
+            flower.style.position = 'absolute';
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.top = Math.random() * 80 + 'vh';
+            flower.style.width = (30 + Math.random()*50) + 'px'; 
+            flower.style.height = 'auto';
+            flower.style.animationDuration = (4 + Math.random()*4) + 's';
+            flower.style.animationDelay = (Math.random()*1) + 's';
+            document.body.appendChild(flower);
+            setTimeout(()=>flower.remove(),7000);
+        }
+    };
+    
+    document.getElementById('send-flower-btn').addEventListener('click', handleFlowerClick);
+    const staticFlowerBtn = document.getElementById('send-flower-btn-static');
+    if (staticFlowerBtn) {
+        staticFlowerBtn.addEventListener('click', handleFlowerClick);
+    }
+
+    // Map Modal
+    const mapBtn = document.getElementById('view-map-btn');
+    const mapModal = document.getElementById('map-modal');
+    const closeMap = document.getElementById('close-map');
+    mapBtn.addEventListener('click', ()=>{ mapModal.classList.remove('hidden'); });
+    closeMap.addEventListener('click', ()=>{ mapModal.classList.add('hidden'); });
+    mapModal.addEventListener('click',(e)=>{ if(e.target===mapModal) mapModal.classList.add('hidden'); });
+
+})();
+</script>
+
+</body>
+</html>
