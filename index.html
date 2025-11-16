@@ -190,15 +190,13 @@ body {
 <script>
 (function() {
     // Event Constants
-    // CORRECTED: Set to 5:00 PM (17:00:00) to match the HTML text
     const EVENT_DATE = "Dec 17, 2025 17:00:00"; 
     const EVENT_TITLE = "Daisy’s 65th Birthday Celebration";
     const EVENT_LOCATION = "L’Sea Dimsum House, Lacson St., Bacolod City";
-    const EVENT_DURATION_HOURS = 3; // Party runs from 5PM to 8PM (17:00 to 20:00)
+    const EVENT_DURATION_HOURS = 3; 
 
     // --- MUSIC PLAYER ---
     const audio = document.getElementById('birthday-audio');
-    const musicBtn = document.getElementById('music-toggle-btn'); 
     let musicStarted = false; 
     let isPlaying = false; 
 
@@ -207,6 +205,7 @@ body {
         if (isPlaying) {
             audio.pause();
         } else {
+            // FIX for Android/Mobile: Unmute and play on user tap
             audio.muted = false; 
             audio.play().catch(error => {
                 console.error("Audio playback failed:", error);
